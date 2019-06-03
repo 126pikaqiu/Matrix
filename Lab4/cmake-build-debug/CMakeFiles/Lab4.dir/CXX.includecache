@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/asus/CLionProjects/Lab4/Bignum.h
+iostream
+-
+cstring
+-
+cstdlib
+-
+cstdio
+-
+
+C:/Users/asus/CLionProjects/Lab4/Matrix.cpp
+Matrix.h
+C:/Users/asus/CLionProjects/Lab4/Matrix.h
+
+C:/Users/asus/CLionProjects/Lab4/Matrix.h
+cassert
+-
+Bignum.h
+C:/Users/asus/CLionProjects/Lab4/Bignum.h
+
+C:/Users/asus/CLionProjects/Lab4/main.cpp
+iostream
+-
+Matrix.h
+C:/Users/asus/CLionProjects/Lab4/Matrix.h
+Bignum.h
+C:/Users/asus/CLionProjects/Lab4/Bignum.h
+map
+-
+fstream
+-
+utility
+-
+regex
+-
+
