@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Matrix.h"
 #include "Bignum.h"
+#include "RPN.h"
 #include <map>
 #include <fstream>
 #include<utility>
@@ -12,7 +13,8 @@ map<string,Matrix> getMatrix() {
     ifstream mafile;
     mafile.open("./res/matrix.in", ios::in);
     if (mafile.fail()) {
-        cout <<"The file matrix.in not found.";
+        cout << "The file matrix.in not found." <<endl;
+        assert(0);
         return matMap;
     }
     string line;
@@ -45,31 +47,118 @@ map<string,Matrix> getMatrix() {
     return matMap;
 }
 
-vector<Matrix> compute(const map<string, Matrix> & map){
+int op(char op){
+    switch(op){
+        case '<':
+        case '>':
+        case '+':
+        case '-':
+        case '*':
+        case '~':
+            return 1;
+        default:
+            return 0; 
+    }
+}
+
+vector<Matrix> compute(map<string, Matrix> & matMap){
     vector<Matrix> v;
-    regex priority[] = {regex("~"),regex("*"),regex("+|-"),regex("+=|-=")};
+    ifstream mafile;
+    mafile.open("./res/expression.in", ios::in);
+    if (mafile.fail()) {
+        cout<< "The file expression.in not found." << endl;
+        assert(0);
+        return v;
+    }
+    string line;
+    while (getline(mafile, line)){
+        RPN rpn(line);
+        vector<string> rp = rpn.toRPN();
+        stack<string> help;
+        Matrix result(3);
+        for (auto & i : rp) {
+            if (!op(i.at(0))) {
+                help.push(i);
+            } else {
+                string right,left;
+                switch (i.at(0)){
+                    case '+':
+                        right = help.top();help.pop();
+                        left = help.top();help.pop();
+                        result = matMap.find(left)->second + matMap.find(right)->second;
+                        left.append("+").append(right);
+                        help.push(left);
+                        matMap.insert(pair<string, Matrix>(left, result));
+                        break;
+                    case '-':
+                        right = help.top();help.pop();
+                        left = help.top();help.pop();
+                        result = matMap.find(left)->second - matMap.find(right)->second;
+                        left.append("-").append(right);
+                        help.push(left);
+                        matMap.insert(make_pair(left, result));
+                        break;
+                    case '*':
+                        right = help.top();help.pop();
+                        left = help.top();help.pop();
+                        if (left.at(0) >= '0' && left.at(0) <= '9') {
+                            result = atoi(left.c_str()) * matMap.find(right)->second;
+                        } else {
+                            result = matMap.find(left)->second * matMap.find(right)->second;
+                        }
+                        left.append("*").append(right);
+                        help.push(left);
+                        matMap.insert(pair<string, Matrix>(left, result));
+                        break;
+                    case '~':
+                        right = help.top();help.pop();
+                        result = ~matMap.find(right)->second;
+                        right.append("~");
+                        help.push(right);
+                        matMap.insert(pair<string, Matrix>(right, result));
+                        break;
+                    case '>':
+                        right = help.top();help.pop();
+                        left = help.top();help.pop();
+                        help.push(left);
+                        result = matMap.find(left)->second + matMap.find(right)->second;
+                        matMap.insert(pair<string, Matrix>(left, result));
+                        break;
+                    case '<':
+                        right = help.top();help.pop();
+                        left = help.top();help.pop();
+                        help.push(left);
+                        result = matMap.find(left)->second - matMap.find(right)->second;
+                        matMap.insert(pair<string, Matrix>(left, result));
+                        break;
+                }
+            }
+        }
+        v.push_back(result);
+    }
     return v;
 }
+
 
 void output(const vector<Matrix> & v) {
     ofstream mafile;
     mafile.open("./res/result.out", ios::out);
     if (mafile.fail()) {
-        cout <<"The file result.out not found.";
+        cout << "The file result.out not found." << endl;
+        assert(0);
         return;
     }
     for (const auto& val : v){
-        cout << val << endl;
+        mafile << val;
+        cout << val;
     }
     mafile.close();
 }
+
 int main(int argv, char *arg[]) {
     map<string, Matrix> matMap;
     matMap = getMatrix();
-    Matrix m = matMap.find("A")->second + matMap.find("B")->second;
-//    cout << m << endl;
-//    cout << ~matMap.find("B")->second;
-//    output(compute(matMap));
+    output(compute(matMap));
     return 0;
 }
 

@@ -8,11 +8,11 @@
 #include "Bignum.h"
 class Matrix{
 private:
-    BigNum *item;
+    BigNum *item = nullptr;
     int row,col;
 public:
-    int count = 0;
-    Matrix();
+    static int count;
+//    Matrix();
     Matrix(int n);
     Matrix(int row, int col);
     Matrix(const Matrix& matrix);
@@ -24,6 +24,8 @@ public:
     const Matrix operator*(const int& mul) const ;
     Matrix& operator+=(const Matrix& matrix);
     Matrix& operator-=(const Matrix& matrix);
+    Matrix& operator=(const Matrix& matrix);
+    friend const Matrix operator*(int a,const Matrix& matrix);
     friend ostream& operator<<(ostream&,  const Matrix&);   //重载输出运算符
     const Matrix operator~() const;
     ~Matrix();

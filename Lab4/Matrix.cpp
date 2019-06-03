@@ -1,28 +1,34 @@
 //
 // Created by asus on 2019/5/31.
 //
-
 #include "Matrix.h"
+int Matrix::count = 0;
 Matrix::Matrix(int n) {
-    cout <<++count<<endl;
+//    cout << "create" << endl;
+//    cout << ++count << endl;
     row = col = n;
     item = new BigNum[n * n];
 }
 
 Matrix::Matrix(int row, int col) {
-    cout <<++count<<endl;
+//    cout << "create" << endl;
+//    cout << ++count << endl;
     this->row = row;
     this->col = col;
     item = new BigNum[row * col];
 }
 Matrix::Matrix(const Matrix &matrix) {
-    cout <<++count<<endl;
+//    cout << "create" << endl;
+//    cout << ++count << endl;
     col = matrix.col;
     row = matrix.row;
     item = new BigNum[col * row];
-    for (int i = 0; i < col * row; i++) {
-        item[i] = matrix.item[i];
+    for (int i = 0; i < col; i++) {
+        for (int j = 0; j < row; j++) {
+            set(i, j, matrix.get(i, j));
+        }
     }
+
 }
 void Matrix::set(int i, int j, const BigNum &bigNum) const {
     item[i * col + j] = bigNum;
@@ -34,7 +40,8 @@ const BigNum Matrix::get(int i, int j) const {
 
 const Matrix Matrix::operator+(const Matrix &matrix) const {
     if (matrix.col != col || matrix.row != row) {
-        assert("无法相加");
+        cout << "Cannot add";
+        assert(0);
         return *this;
     }
     Matrix _copy = *this;
@@ -45,7 +52,8 @@ const Matrix Matrix::operator+(const Matrix &matrix) const {
 
 Matrix& Matrix::operator+=(const Matrix &matrix) {
     if (matrix.col != col || matrix.row != row) {
-        assert("无法相加");
+        cout << "Cannot add";
+        assert(0);
         return *this;
     }
     for (int i = 0; i < col * row; i++)
@@ -55,7 +63,8 @@ Matrix& Matrix::operator+=(const Matrix &matrix) {
 
 const Matrix Matrix::operator-(const Matrix &matrix) const {
     if (matrix.col != col || matrix.row != row) {
-        assert("无法相减");
+        cout << "Cannot reduce"  ;
+        assert(0);
         return *this;
     }
     Matrix _copy = *this;
@@ -66,7 +75,8 @@ const Matrix Matrix::operator-(const Matrix &matrix) const {
 
 Matrix& Matrix::operator-=(const Matrix &matrix) {
     if (matrix.col != col || matrix.row != row) {
-        assert("无法相减");
+        cout << "Cannot reduce"  ;
+        assert(0);
         return *this;
     }
     for (int i = 0; i < col * row; i++)
@@ -83,7 +93,8 @@ const Matrix Matrix::operator*(const int &mul) const {
 
 const Matrix Matrix::operator*(const Matrix &matrix) const {
     if (col != matrix.row){
-        assert("无法相乘");
+        cout << "Cannot multiply" ;
+        assert(0);
         return *this;
     }
     Matrix _copy(row, matrix.col);
@@ -117,13 +128,25 @@ ostream& operator<<(ostream & out, const Matrix & matrix) {
             out << matrix.get(i, j);
             out << " ";
         }
-        if (i != matrix.row - 1)
-            out << '\n';
+        out << '\n';
     }
     return out;
 }
 
+Matrix& Matrix::operator=(const Matrix &matrix) {
+    for (int i = 0; i < col * row; i++)
+        item[i] = matrix.item[i];
+    return *this;
+}
+
 Matrix::~Matrix() {
-    cout <<--count<<endl;
     delete []item;
+}
+
+const Matrix operator*(int a, const Matrix &matrix){
+    Matrix _copy = matrix;
+    for (int i = 0; i < _copy.col * _copy.row; i++) {
+        _copy.item[i] = _copy.item[i] * a;
+    }
+    return _copy;
 }

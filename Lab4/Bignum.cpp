@@ -6,7 +6,7 @@
 
 BigNum::BigNum(const int a) {
     len = 0;
-    memset(cache,0, sizeof(cache));
+    memset(cache, 0, sizeof(cache));
     //convert to the number of 100 decimal
     int d = a;
     bool flag = false;
@@ -26,14 +26,14 @@ BigNum::BigNum(const int a) {
 }
 
 BigNum::BigNum(const BigNum & bigNum): len(bigNum.len){
-    memset(cache,0, sizeof(cache));
+    memset(cache, 0, sizeof(cache));
     for(int i = 0; i < len; i++)
         cache[i] = bigNum.cache[i];
 }
 
 BigNum::BigNum() {
     len = 1;
-    memset(cache,0,sizeof(cache));
+    memset(cache, 0, sizeof(cache));
 }
 
 BigNum::BigNum(const char * s) {
@@ -45,7 +45,7 @@ BigNum::BigNum(const char * s) {
     }
     const char *s1 = s + start;
     int t,k,index,l,i;
-    memset(cache,0,sizeof(cache));
+    memset(cache, 0, sizeof(cache));
     l = strlen(s1);
     len = l / DLEN;
     if (l % DLEN)
@@ -77,24 +77,20 @@ const BigNum BigNum::operator+(const BigNum &bigNum) const {
     BigNum result(*this);
     int lenb = bigNum.len;
     int lena;
-    if (bigNum.cache[0] == '0' && lenb == 1)
-    {
+    if (bigNum.cache[0] == '0' && lenb == 1){
         // the case bigNum is 0.
         return result;
     }
-    if (cache[0] == '0' && len == 1)
-    {
+    if (cache[0] == '0' && len == 1){
         // the case this is 0.
         strcpy(result.cache, bigNum.cache);
         return result;
     }
     // assign the larger length to the result's len.
     lena = len > lenb ? len : lenb;
-    for(int j = 0 ; j < lena ; j++)
-    {
+    for(int j = 0 ; j < lena ; j++){
         result.cache[j] +=bigNum.cache[j];
-        if(result.cache[j] > MAXN)
-        {
+        if(result.cache[j] > MAXN){
             result.cache[j + 1]++;
             result.cache[j] -= MAXN+1;
         }
@@ -193,23 +189,20 @@ bool BigNum::operator>(const BigNum & bigNum) const {
         ln = len - 1;
         while(cache[ln] == bigNum.cache[ln] && ln >= 0)
             ln--;
-        if(ln >= 0 && cache[ln] > bigNum.cache[ln])
-            return true;
-        else
-            return false;
+        return ln >= 0 && cache[ln] > bigNum.cache[ln];
     }
     else
         return false;
 }
 
-ostream& operator<<(ostream& out,  const BigNum& b) {
+ostream& operator<<(ostream& out,  const BigNum& b)  {
     int i;
-    cout << int(b.cache[b.len - 1]);
+    out << int(b.cache[b.len - 1]);
     for(i = b.len - 2 ; i >= 0 ; i--)
     {
-        cout.width(DLEN);
-        cout.fill('0');
-        cout << int(b.cache[i]);
+        out.width(DLEN);
+        out.fill('0');
+        out << int(b.cache[i]);
     }
     return out;
 }

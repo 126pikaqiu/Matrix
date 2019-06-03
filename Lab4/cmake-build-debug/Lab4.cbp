@@ -92,7 +92,16 @@
 		<Unit filename="C:/Users/asus/CLionProjects/Lab4/Matrix.h">
 			<Option target="Lab4"/>
 		</Unit>
+		<Unit filename="C:/Users/asus/CLionProjects/Lab4/RPN.cpp">
+			<Option target="Lab4"/>
+		</Unit>
+		<Unit filename="C:/Users/asus/CLionProjects/Lab4/RPN.h">
+			<Option target="Lab4"/>
+		</Unit>
 		<Unit filename="C:/Users/asus/CLionProjects/Lab4/main.cpp">
+			<Option target="Lab4"/>
+		</Unit>
+		<Unit filename="C:/Users/asus/CLionProjects/Lab4/test.cpp">
 			<Option target="Lab4"/>
 		</Unit>
 		<Unit filename="C:/Users/asus/CLionProjects/Lab4/CMakeLists.txt">
