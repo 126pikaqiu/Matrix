@@ -55,10 +55,20 @@ int op(char op){
         case '-':
         case '*':
         case '~':
+        case '=':
             return 1;
         default:
             return 0; 
     }
+}
+
+bool isNum(const string& str){
+    for (char i : str) {
+        if (i < '0' || i > '9'){
+            return false;
+        }
+    }
+    return true;
 }
 
 vector<Matrix> compute(map<string, Matrix> & matMap){
@@ -79,11 +89,20 @@ vector<Matrix> compute(map<string, Matrix> & matMap){
         for (auto & i : rp) {
             if (!op(i.at(0))) {
                 help.push(i);
+                if (!isNum(help.top())) {
+                    result = matMap.find(help.top())->second;
+                }
             } else {
                 string right,left;
+                right = help.top();help.pop();
                 switch (i.at(0)){
+                    case '=':
+                        left = help.top();help.pop();
+                        result = matMap.find(right)->second;
+                        help.push(left);
+                        matMap.insert(pair<string, Matrix>(left, result));
+                        break;
                     case '+':
-                        right = help.top();help.pop();
                         left = help.top();help.pop();
                         result = matMap.find(left)->second + matMap.find(right)->second;
                         left.append("+").append(right);
@@ -91,7 +110,6 @@ vector<Matrix> compute(map<string, Matrix> & matMap){
                         matMap.insert(pair<string, Matrix>(left, result));
                         break;
                     case '-':
-                        right = help.top();help.pop();
                         left = help.top();help.pop();
                         result = matMap.find(left)->second - matMap.find(right)->second;
                         left.append("-").append(right);
@@ -99,9 +117,8 @@ vector<Matrix> compute(map<string, Matrix> & matMap){
                         matMap.insert(make_pair(left, result));
                         break;
                     case '*':
-                        right = help.top();help.pop();
                         left = help.top();help.pop();
-                        if (left.at(0) >= '0' && left.at(0) <= '9') {
+                        if (isNum(left)) {
                             result = atoi(left.c_str()) * matMap.find(right)->second;
                         } else {
                             result = matMap.find(left)->second * matMap.find(right)->second;
@@ -111,21 +128,18 @@ vector<Matrix> compute(map<string, Matrix> & matMap){
                         matMap.insert(pair<string, Matrix>(left, result));
                         break;
                     case '~':
-                        right = help.top();help.pop();
                         result = ~matMap.find(right)->second;
                         right.append("~");
                         help.push(right);
                         matMap.insert(pair<string, Matrix>(right, result));
                         break;
                     case '>':
-                        right = help.top();help.pop();
                         left = help.top();help.pop();
                         help.push(left);
                         result = matMap.find(left)->second + matMap.find(right)->second;
                         matMap.insert(pair<string, Matrix>(left, result));
                         break;
                     case '<':
-                        right = help.top();help.pop();
                         left = help.top();help.pop();
                         help.push(left);
                         result = matMap.find(left)->second - matMap.find(right)->second;
@@ -138,6 +152,8 @@ vector<Matrix> compute(map<string, Matrix> & matMap){
     }
     return v;
 }
+
+
 
 
 void output(const vector<Matrix> & v) {
@@ -158,6 +174,7 @@ void output(const vector<Matrix> & v) {
 int main(int argv, char *arg[]) {
     map<string, Matrix> matMap;
     matMap = getMatrix();
+    matMap.insert(make_pair("mzero",Matrix(3)));
     output(compute(matMap));
     return 0;
 }

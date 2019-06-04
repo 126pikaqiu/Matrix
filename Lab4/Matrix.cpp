@@ -4,22 +4,16 @@
 #include "Matrix.h"
 int Matrix::count = 0;
 Matrix::Matrix(int n) {
-//    cout << "create" << endl;
-//    cout << ++count << endl;
     row = col = n;
     item = new BigNum[n * n];
 }
 
 Matrix::Matrix(int row, int col) {
-//    cout << "create" << endl;
-//    cout << ++count << endl;
     this->row = row;
     this->col = col;
     item = new BigNum[row * col];
 }
 Matrix::Matrix(const Matrix &matrix) {
-//    cout << "create" << endl;
-//    cout << ++count << endl;
     col = matrix.col;
     row = matrix.row;
     item = new BigNum[col * row];
@@ -102,7 +96,7 @@ const Matrix Matrix::operator*(const Matrix &matrix) const {
         for (int j = 0; j < matrix.col; j++) {
             BigNum sum(0);
             for (int k = 0; k < matrix.row; k++) {
-                sum = sum + get(i, k) * matrix.get(k, j);
+                sum = sum + (get(i, k) * matrix.get(k, j));
             }
             _copy.set(i, j, sum);
         }

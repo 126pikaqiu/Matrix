@@ -76,7 +76,6 @@ BigNum::BigNum(const char * s) {
 const BigNum BigNum::operator+(const BigNum &bigNum) const {
     BigNum result(*this);
     int lenb = bigNum.len;
-    int lena;
     if (bigNum.cache[0] == '0' && lenb == 1){
         // the case bigNum is 0.
         return result;
@@ -86,13 +85,32 @@ const BigNum BigNum::operator+(const BigNum &bigNum) const {
         strcpy(result.cache, bigNum.cache);
         return result;
     }
+    if (bigNum.cache[bigNum.len - 1] < 0 && result.cache[result.len - 1] < 0) {
+        BigNum bigNum1(bigNum);
+        bigNum1.cache[bigNum1.len - 1] = - bigNum1.cache[bigNum1.len - 1];
+        result.cache[result.len - 1] = - result.cache[result.len - 1];
+        result = result + bigNum1;
+        result.cache[result.len - 1] = - result.cache[result.len - 1];
+        return result;
+    } else if (bigNum.cache[bigNum.len - 1] < 0) {
+        BigNum bigNum1(bigNum);
+        bigNum1.cache[bigNum1.len - 1] = - bigNum1.cache[bigNum1.len - 1];
+        result = result - bigNum1;
+        return result;
+    } else if(result.cache[result.len - 1] < 0){
+        result.cache[result.len - 1] = - result.cache[result.len - 1];
+        result = bigNum - result;
+        return result;
+    }
     // assign the larger length to the result's len.
-    lena = len > lenb ? len : lenb;
+    int lena = len > lenb ? len : lenb;
     for(int j = 0 ; j < lena ; j++){
-        result.cache[j] +=bigNum.cache[j];
-        if(result.cache[j] > MAXN){
+        int i = result.cache[j] + bigNum.cache[j];
+        if(i > MAXN){
             result.cache[j + 1]++;
-            result.cache[j] -= MAXN+1;
+            result.cache[j] = i - MAXN - 1;
+        }else{
+            result.cache[j] = i;
         }
     }
     // check if the result would carry.
@@ -111,6 +129,11 @@ const BigNum BigNum::operator+(const BigNum &bigNum) const {
  * @return
  */
 const BigNum BigNum::operator-(const BigNum &bigNum) const {
+    if (bigNum.cache[bigNum.len - 1] < 0) {
+        BigNum bigNum1(bigNum);
+        bigNum1.cache[bigNum1.len - 1] = - bigNum1.cache[bigNum1.len - 1];
+        return bigNum1 + *this;
+    }
     BigNum left,right;
     bool flag; // the sign bit
     if(*this > bigNum){
@@ -125,24 +148,26 @@ const BigNum BigNum::operator-(const BigNum &bigNum) const {
     int big = left.len;
     for(int j = 0; j < big; j++ ){
         if(left.cache[j] < right.cache[j]){
-            int i = j + 1;
-            while (left.cache[j] == 0)
+            int i = j;
+            while (left.cache[j] <= right.cache[j])
                 j++;
             left.cache[j--] --;
-            while (j > i)
-                left.cache[j--] = MAXN;
+            int k = j + 1;
+            while (j > i) {
+                left.cache[j] += MAXN  - right.cache[j];
+                j--;
+            }
             left.cache[i] += MAXN + 1 - right.cache[i];
+            j = k;
         }else{
             left.cache[j] -= right.cache[j];
         }
     }
-    while(left.cache[len - 1] == 0 && left.len > 1)
-    {
+    while(left.cache[left.len - 1] == 0 && left.len > 1){
         left.len--;
-        big--;
     }
     if(flag)
-        left.cache[big-1] = 0 - left.cache[big-1];
+        left.cache[left.len - 1] = 0 - left.cache[left.len-1];
     return left;
 }
 
@@ -159,8 +184,7 @@ const BigNum BigNum::operator*(const BigNum & bigNum) const {
         up = 0;
         for(j = 0; j < bigNum.len; j++){
             temp = cache[i] * bigNum.cache[j] + ret.cache[i + j] + up;
-            if(temp > MAXN)
-            {
+            if(temp > MAXN){
                 temp1 = temp - temp / (MAXN + 1) * (MAXN + 1);
                 up = temp / (MAXN + 1);
                 ret.cache[i + j] = temp1;

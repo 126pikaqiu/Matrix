@@ -11,19 +11,24 @@ RPN::RPN(const string &s1) {
     while (s.find("-=") != string::npos) {
         s.replace(s.find("-="), 2, "<");
     }
+    if (s.at(0) == '-') {
+        s = string("mzero") + s;
+    }
 }
 int RPN::precedence(char op) const {
     switch(op){
+        case '=':
+            return 1;
         case '<':
         case '>':
-            return 1;
+            return 2;
         case '+':
         case '-':
-            return 2; //定义加减运算的优先级为1
+            return 3; //定义加减运算的优先级为1
         case '*':
-            return 3; //定义乘除运算的优先级为2
+            return 4; //定义乘除运算的优先级为2
         case '~':
-            return 4;
+            return 5;
         case '\0':
         default:
             return 0; //定义在栈中的左括号和栈底字符的优先级为0
