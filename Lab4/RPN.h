@@ -18,5 +18,6 @@ public:
     int precedence(char op) const ;
     RPN(const string & s1);
     vector<string> toRPN();
+    string scan(const string & s1);
 };
 #endif //LAB4_RPN_H

@@ -5,7 +5,7 @@
 #include "RPN.h"
 RPN::RPN(const string &s1) {
     s = s1;
-    while (s.find("+=") != string::npos){
+    while (s.find("+=") != string::npos) {
         s.replace(s.find("+="), 2, ">");
     }
     while (s.find("-=") != string::npos) {
@@ -14,6 +14,27 @@ RPN::RPN(const string &s1) {
     if (s.at(0) == '-') {
         s = string("mzero") + s;
     }
+    s = scan(s);
+}
+
+string RPN::scan(const string &s) {
+    bool flag = false;
+    string s1(s);
+    int j = s.length();
+    for (int i = 0; i < j; i++) {
+        if(precedence(s1.at(i)) > 0) {
+            if (flag) {
+                s1.insert(i, string("mzero"), 0, 5);
+                i += 5;
+                j += 5;
+            } else {
+                flag = true;
+            }
+        } else {
+            flag = false;
+        }
+    }
+    return s1;
 }
 int RPN::precedence(char op) const {
     switch(op){

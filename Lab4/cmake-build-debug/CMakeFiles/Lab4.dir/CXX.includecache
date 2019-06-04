@@ -6,9 +6,21 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/asus/CLionProjects/Lab4/RPN.cpp
-RPN.h
-C:/Users/asus/CLionProjects/Lab4/RPN.h
+C:/Users/asus/CLionProjects/Lab4/Bignum.h
+iostream
+-
+cstring
+-
+cstdlib
+-
+cstdio
+-
+
+C:/Users/asus/CLionProjects/Lab4/Matrix.h
+cassert
+-
+Bignum.h
+C:/Users/asus/CLionProjects/Lab4/Bignum.h
 
 C:/Users/asus/CLionProjects/Lab4/RPN.h
 iostream
@@ -22,5 +34,23 @@ cstring
 cstdlib
 -
 cstdio
+-
+
+C:/Users/asus/CLionProjects/Lab4/main.cpp
+iostream
+-
+Matrix.h
+C:/Users/asus/CLionProjects/Lab4/Matrix.h
+Bignum.h
+C:/Users/asus/CLionProjects/Lab4/Bignum.h
+RPN.h
+C:/Users/asus/CLionProjects/Lab4/RPN.h
+map
+-
+fstream
+-
+utility
+-
+regex
 -
 
