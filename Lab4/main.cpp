@@ -71,7 +71,7 @@ bool isNum(const string& str){
     return true;
 }
 
-vector<Matrix> compute(map<string, Matrix> & matMap){
+vector<Matrix> compute(const map<string, Matrix> & matmap){
     vector<Matrix> v;
     ifstream mafile;
     mafile.open("./res/expression.in", ios::in);
@@ -82,6 +82,7 @@ vector<Matrix> compute(map<string, Matrix> & matMap){
     }
     string line;
     while (getline(mafile, line)){
+        map<string, Matrix> matMap = matmap;
         RPN rpn(line);
         vector<string> rp = rpn.toRPN();
         stack<string> help;
@@ -100,6 +101,7 @@ vector<Matrix> compute(map<string, Matrix> & matMap){
                         left = help.top();help.pop();
                         result = matMap.find(right)->second;
                         help.push(left);
+                        matMap.erase(matMap.find(left));
                         matMap.insert(pair<string, Matrix>(left, result));
                         break;
                     case '+':
@@ -137,12 +139,14 @@ vector<Matrix> compute(map<string, Matrix> & matMap){
                         left = help.top();help.pop();
                         help.push(left);
                         result = matMap.find(left)->second + matMap.find(right)->second;
+                        matMap.erase(matMap.find(left));
                         matMap.insert(pair<string, Matrix>(left, result));
                         break;
                     case '<':
                         left = help.top();help.pop();
                         help.push(left);
                         result = matMap.find(left)->second - matMap.find(right)->second;
+                        matMap.erase(matMap.find(left));
                         matMap.insert(pair<string, Matrix>(left, result));
                         break;
                 }

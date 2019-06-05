@@ -11,13 +11,15 @@
 #include<cstdlib>
 #include<cstdio>
 using namespace std;
+#define EQUAL_HANDLE
 class RPN{
 private:
     string s;
-public:
+    string scan(const string & s1);
+    bool equal_handle(char ne, char ol);
     int precedence(char op) const ;
+public:
     RPN(const string & s1);
     vector<string> toRPN();
-    string scan(const string & s1);
 };
 #endif //LAB4_RPN_H

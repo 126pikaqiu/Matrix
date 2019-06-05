@@ -16,11 +16,18 @@ RPN::RPN(const string &s1) {
     }
     s = scan(s);
 }
-
-string RPN::scan(const string &s) {
+bool RPN::equal_handle(char ne, char ol) {
+    #ifdef EQUAL_HANDLE
+    if ((ne == '=' && ol == '=') || (precedence(ne) == 2 && precedence(ol) == 2)) {
+        return false;
+    }
+    #endif
+    return true;
+}
+string RPN::scan(const string &s2) {
     bool flag = false;
-    string s1(s);
-    int j = s.length();
+    string s1(s2);
+    int j = s2.length();
     for (int i = 0; i < j; i++) {
         if(precedence(s1.at(i)) > 0) {
             if (flag) {
@@ -66,11 +73,11 @@ vector<string> RPN::toRPN() {
         if(ch == ' '){}
         else if(precedence(ch) > 0){
             char w = sta.top();
-            while(precedence(w) >= precedence(ch)) {
+            while(precedence(w) >= precedence(ch) && equal_handle(w, ch)) {
                 char value[2] = {w, 0};
                 string item(value);
-                rpn.push_back(item);  //栈里的大的话 栈那个写入
-                sta.pop(); //继续出栈   这是一个循环
+                rpn.push_back(item);
+                sta.pop();
                 w = sta.top();
             }
             sta.push(ch);  //压入此字符
