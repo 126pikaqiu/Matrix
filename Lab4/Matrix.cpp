@@ -35,6 +35,7 @@ const BigNum Matrix::get(int i, int j) const {
 const Matrix Matrix::operator+(const Matrix &matrix) const {
     if (matrix.col != col || matrix.row != row) {
         cout << "Cannot add";
+
         assert(0);
         return *this;
     }

@@ -29,7 +29,7 @@ string RPN::scan(const string &s2) {
     string s1(s2);
     int j = s2.length();
     for (int i = 0; i < j; i++) {
-        if(precedence(s1.at(i)) > 0) {
+        if(precedence(s1.at(i)) > 0 && precedence(s1.at(i) != 5)) {
             if (flag) {
                 s1.insert(i, string("mzero"), 0, 5);
                 i += 5;

@@ -158,7 +158,7 @@ const BigNum BigNum::operator-(const BigNum &bigNum) const {
                 j--;
             }
             left.cache[i] += MAXN + 1 - right.cache[i];
-            j = k;
+            j = k - 1;
         }else{
             left.cache[j] -= right.cache[j];
         }

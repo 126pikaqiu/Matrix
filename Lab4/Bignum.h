@@ -13,7 +13,6 @@ using namespace std;
 
 #define MAXLEN 40
 #define MAXN 99   //每一个char储存位最大存入99
-#define MAXSIZE 10
 #define DLEN 2
 class BigNum
 {

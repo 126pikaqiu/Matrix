@@ -170,7 +170,9 @@ void output(const vector<Matrix> & v) {
     }
     for (const auto& val : v){
         mafile << val;
+        mafile << "=====================================" << endl;
         cout << val;
+        cout << "=====================================" << endl;
     }
     mafile.close();
 }
